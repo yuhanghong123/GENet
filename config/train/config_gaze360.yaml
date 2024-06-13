@@ -1,0 +1,25 @@
+---
+params:
+    batch_size: 32  # org:24
+    epoch: 20
+    lr: 0.0001
+    decay: 1
+    decay_step: 10
+
+save:
+    metapath: "/home/hyh1/gaze_domain_adption/code/PureGaze/exp/resnet_test-PureGaze/"
+    folder: gaze360
+    name: gaze360
+    step: 1
+
+data:
+    image: "/home/hyh1/gaze/dataset/FaceBased/Image/"
+    label: "/home/hyh1/gaze/dataset/FaceBased/Label/train.label"
+    header: True
+    name: gaze360
+    isFolder: False
+
+pretrain: False
+device: 1
+reader: reader_adap
+map: "/home/hyh1/gaze_domain_adption/code/PureGaze/Masker/360-masker20.jpg"

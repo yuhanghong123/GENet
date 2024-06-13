@@ -1,0 +1,14 @@
+---
+load:
+    begin: 1
+    end: 5
+    steps: 1
+data: 
+    image: "/home/hyh1/gaze/dataset/MPIIFaceGaze_after/Image"
+    label: "/home/hyh1/gaze/dataset/MPIIFaceGaze_after/Label"
+    name: mpii
+    header: True
+    isFolder: True
+savename: "evaluation-mpii"
+device: 1
+reader: reader_adap

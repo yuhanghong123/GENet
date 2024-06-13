@@ -1,0 +1,25 @@
+---
+params:
+    batch_size: 64
+    epoch: 5
+    lr: 0.0001
+    decay: 1
+    decay_step: 10
+
+save:
+    metapath: "/home/hyh1/gaze_domain_adption/code/PureGaze/exp/resnet_test-PureGaze/"
+    folder: eth
+    name: eth
+    step: 1
+
+data:
+    image: "/home/hyh1/gaze/dataset/xgaze_224/Image/train/"
+    label: "/home/hyh1/gaze/dataset/xgaze_224/Label/train.label"
+    header: True
+    name: eth
+    isFolder: False
+
+pretrain: False
+device: 1
+reader: reader_adap
+map: "/home/hyh1/gaze_domain_adption/code/PureGaze/Masker/ETH-masker20.jpg"

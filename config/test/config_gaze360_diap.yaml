@@ -1,0 +1,14 @@
+---
+load:
+    begin: 1
+    end: 20
+    steps: 1
+data: 
+    image: "/home/hyh1/gaze/dataset/eyediap/EYEDIAP/EyeDiap_temp/Image"
+    label: "/home/hyh1/gaze/dataset/eyediap_test_path"
+    name: diap
+    header: True
+    isFolder: True
+savename: "evaluation-diap"
+device: 1
+reader: reader_adap
