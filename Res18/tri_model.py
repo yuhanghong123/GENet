@@ -10,7 +10,7 @@ class Model(nn.Module):
     def __init__(self):
         super(Model, self).__init__()
 
-        self.feature =  modules.ResFeature(modules.BasicBlock, [2,2,2,2])
+        self.feature =  modules.ResFeature(modules.Tri_BasicBlock, [2,2,2,2])
 
         self.img_feature_dim = 256  # the dimension of the CNN feature to represent each frame
 
