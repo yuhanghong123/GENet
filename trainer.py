@@ -2,8 +2,10 @@ import argparse
 import torch.backends.cudnn as cudnn
 from easydict import EasyDict as edict
 from utils.ctools import TimeCounter
-from utils import model, modules
-from yolov10backbone import v10model
+# from utils import tri18_model as model
+# from utils import model 
+from Res18 import sppf_model as model
+# from yolov10backbone import v10model
 import cv2
 import yaml
 import time
@@ -16,7 +18,7 @@ import os
 import sys
 from tqdm import tqdm 
 sys.path.insert(0, os.getcwd())
-# sys.path.insert(0, "/home/chengyihua/utils/")
+
 
 
 def main(train):
@@ -40,6 +42,9 @@ def main(train):
     # Build model
     # build model ------------------------------------------------
     print("===> Model building <===")
+    # net = res18model.Model()
+    
+    # net = v10model.Model(alpha=1)
     net = model.Model()
     # net = v10model.Model(alpha=1)
     net.train()
