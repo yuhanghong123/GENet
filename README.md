@@ -1,1 +1,2 @@
-# 域适应的注视预测方法
+# Gaze Estimation with Domain Generalization for Assisting Amyotrophic Lateral Sclerosis Patients
+
