@@ -4,9 +4,10 @@ from easydict import EasyDict as edict
 from utils.ctools import TimeCounter
 # from utils import tri18_model as model
 # from utils import model 
-from Res18 import sppf_model as model
+from Res18 import C2fCIB_model as model
+from torch.utils.tensorboard import SummaryWriter
 # from yolov10backbone import v10model
-import cv2
+import cv2 
 import yaml
 import time
 import torch.optim as optim
@@ -82,6 +83,10 @@ def main(train):
     timer = TimeCounter(total)
 
     print("Training")
+
+
+    writer = SummaryWriter(log_dir=savepath)
+
     with open(os.path.join(savepath, "train_log"), 'w') as outfile:
         for epoch in range(1, config["params"]["epoch"]+1):
             for i, (data, label) in enumerate(tqdm(dataset)):
@@ -130,7 +135,8 @@ def main(train):
                           f"dloss:{deloss} " +\
                           f"lr:{params.lr} " +\
                           f"rest time:{rest:.2f}h"
-
+                    writer.add_scalar("loss/gloss", geloss, epoch * length + i)
+                    writer.add_scalar("loss/dloss", deloss, epoch * length + i)
                     # print(log)
                     outfile.write(log + "\n")
                     sys.stdout.flush()
