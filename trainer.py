@@ -4,7 +4,7 @@ from easydict import EasyDict as edict
 from utils.ctools import TimeCounter
 # from utils import tri18_model as model
 # from utils import model 
-from Res18 import C2fCIB_model as model
+from Res18 import PSA_model as model
 from torch.utils.tensorboard import SummaryWriter
 # from yolov10backbone import v10model
 import cv2 
@@ -57,7 +57,9 @@ def main(train):
     print("optimizer building")
     geloss_op = model.Gelossop(attentionmap, w1=3, w2=1)
     deloss_op = model.Delossop()
-
+    
+    # 设置学习率为余弦调度
+    
     ge_optimizer = optim.Adam(net.feature.parameters(),
                               lr=params.lr, betas=(0.9, 0.95))
 
@@ -66,7 +68,9 @@ def main(train):
 
     de_optimizer = optim.Adam(net.deconv.parameters(),
                               lr=params.lr, betas=(0.9, 0.95))
-
+    scheduler1 = optim.lr_scheduler.CosineAnnealingLR(ge_optimizer, T_max=5, eta_min=1e-5)
+    scheduler2 = optim.lr_scheduler.CosineAnnealingLR(ga_optimizer, T_max=5, eta_min=1e-5)
+    scheduler3 = optim.lr_scheduler.CosineAnnealingLR(de_optimizer, T_max=5, eta_min=1e-5)
     # scheduler = optim.lr_scheduler.StepLR(optimizer,
     # step_size=params.decay_step, gamma=params.decay)
 
@@ -132,6 +136,10 @@ def main(train):
                 ga_optimizer.step()
                 de_optimizer.step()
 
+                scheduler1.step()
+                scheduler2.step()
+                scheduler3.step()
+
                 rest = timer.step()/3600
 
                 # print logs
@@ -144,6 +152,8 @@ def main(train):
                           f"rest time:{rest:.2f}h"
                     writer.add_scalar("loss/gloss", geloss, epoch * length + i)
                     writer.add_scalar("loss/dloss", deloss, epoch * length + i)
+                    writer.add_scalar("lr", params.lr, epoch * length + i)
+                    writer.add_scalar("rest time", rest, epoch * length + i)
                     # print(log)
                     outfile.write(log + "\n")
                     sys.stdout.flush()
