@@ -115,12 +115,19 @@ def main(train):
                 for param in net.feature.parameters():
                     param.requires_grad = False
 
+                for param in net.gazeEs.parameters():
+                    param.requires_grad = False
+
                 deloss = deloss_op(img, data["face"])
                 deloss.backward()
 
                 for param in net.feature.parameters():
                     param.requires_grad = True
 
+                    
+                for param in net.gazeEs.parameters():
+                    param.requires_grad = True
+                    
                 ge_optimizer.step()
                 ga_optimizer.step()
                 de_optimizer.step()
