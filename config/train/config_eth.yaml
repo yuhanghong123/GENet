@@ -1,13 +1,13 @@
 ---
 params:
-    batch_size: 64
+    batch_size: 32
     epoch: 5
     lr: 0.0001
     decay: 1
     decay_step: 10
 
 save:
-    metapath: "/home/hyh1/gaze_domain_adption/code/PureGaze/exp/resnet_test-PureGaze/"
+    metapath: "/home/hyh1/gaze_domain_adption/code/PureGaze/exp/resnet18_test-PureGaze/"
     folder: eth
     name: eth
     step: 1
@@ -21,5 +21,5 @@ data:
 
 pretrain: False
 device: 1
-reader: reader_adap
+reader: reader_adap_train
 map: "/home/hyh1/gaze_domain_adption/code/PureGaze/Masker/ETH-masker20.jpg"

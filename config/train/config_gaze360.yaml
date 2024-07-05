@@ -7,7 +7,7 @@ params:
     decay_step: 10
 
 save:
-    metapath: "/home/hyh1/gaze_domain_adption/code/PureGaze/exp/resnet_test-PureGaze/"
+    metapath: "/home/hyh1/gaze_domain_adption/code/PureGaze/exp/resnet18_test-PureGaze/"
     folder: gaze360
     name: gaze360
     step: 1
@@ -20,6 +20,6 @@ data:
     isFolder: False
 
 pretrain: False
-device: 1
-reader: reader_adap
+device: 0
+reader: reader_adap_train
 map: "/home/hyh1/gaze_domain_adption/code/PureGaze/Masker/360-masker20.jpg"
