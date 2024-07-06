@@ -79,6 +79,40 @@ def Get_Decode(name):
     return mapping[key]
     
 
+    # Add Gaussian noise to the image
+class AddGaussianNoise(object):
+    def __init__(self, mean=0.0, std=0.1):  # 将标准差设置为较小的值，如0.05
+        self.mean = mean
+        self.std = std
+
+    def __call__(self, tensor):
+        noise = torch.randn(tensor.size()) * self.std + self.mean
+        noisy_tensor = tensor + noise
+        noisy_tensor = torch.clamp(noisy_tensor, 0, 1)
+        return noisy_tensor
+
+
+class CLAHETransform:
+    def __init__(self, clip_limit=2.0, tile_grid_size=(5, 5)):
+        self.clip_limit = clip_limit
+        self.tile_grid_size = tile_grid_size
+
+    def __call__(self, img):
+        # Ensure the input is a numpy array
+        if not isinstance(img, np.ndarray):
+            raise TypeError('img should be numpy array. Got {}'.format(type(img)))
+
+        b, g, r = cv2.split(img)
+        clahe = cv2.createCLAHE(clipLimit=self.clip_limit, tileGridSize=self.tile_grid_size)
+        clahe_b = clahe.apply(b)
+        clahe_g = clahe.apply(g)
+        clahe_r = clahe.apply(r)
+        img = cv2.merge((clahe_b, clahe_g, clahe_r))
+
+        return img
+
+  
+
 class commonloader(Dataset): 
   def __init__(self, dataset):
 
@@ -99,8 +133,11 @@ class commonloader(Dataset):
 
     # build transforms
     self.transforms = transforms.Compose([
-        transforms.ToTensor()
+        CLAHETransform(),
+        transforms.ToTensor(),
+        # AddGaussianNoise(mean=0, std=0.1)
     ])
+    
     
   def __len__(self):
     return len(self.source.line)
