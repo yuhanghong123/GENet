@@ -4,7 +4,7 @@ from easydict import EasyDict as edict
 from utils.ctools import TimeCounter
 # from utils import tri18_model as model
 # from utils import model 
-from Res18 import PSA_model as model
+from Res18 import model as model
 from torch.utils.tensorboard import SummaryWriter
 # from yolov10backbone import v10model
 import cv2 
@@ -68,9 +68,9 @@ def main(train):
 
     de_optimizer = optim.Adam(net.deconv.parameters(),
                               lr=params.lr, betas=(0.9, 0.95))
-    scheduler1 = optim.lr_scheduler.CosineAnnealingLR(ge_optimizer, T_max=5, eta_min=1e-5)
-    scheduler2 = optim.lr_scheduler.CosineAnnealingLR(ga_optimizer, T_max=5, eta_min=1e-5)
-    scheduler3 = optim.lr_scheduler.CosineAnnealingLR(de_optimizer, T_max=5, eta_min=1e-5)
+    # scheduler1 = optim.lr_scheduler.CosineAnnealingLR(ge_optimizer, T_max=5, eta_min=1e-5)
+    # scheduler2 = optim.lr_scheduler.CosineAnnealingLR(ga_optimizer, T_max=5, eta_min=1e-5)
+    # scheduler3 = optim.lr_scheduler.CosineAnnealingLR(de_optimizer, T_max=5, eta_min=1e-5)
     # scheduler = optim.lr_scheduler.StepLR(optimizer,
     # step_size=params.decay_step, gamma=params.decay)
 
@@ -97,6 +97,17 @@ def main(train):
 
                 # Acquire data
                 data["face"] = data["face"].cuda()
+                
+                # output_folder ="./output"
+
+                # os.makedirs(output_folder, exist_ok=True)
+                # output_path = os.path.join(output_folder, f"epoch_{epoch}_iter_{i}.jpg")
+                # image_numpy = data["face"][0].cpu().numpy().transpose(1, 2, 0)
+                # #print(f"Transposed shape of image tensor: {image_numpy.shape}")
+
+                # image_numpy = (image_numpy * 255).astype(np.uint8)
+                # cv2.imwrite(output_path, image_numpy)   
+                
                 label = label.cuda()
 
                 # forward
@@ -119,8 +130,8 @@ def main(train):
                 for param in net.feature.parameters():
                     param.requires_grad = False
 
-                for param in net.gazeEs.parameters():
-                    param.requires_grad = False
+                # for param in net.gazeEs.parameters():
+                #     param.requires_grad = False
 
                 deloss = deloss_op(img, data["face"])
                 deloss.backward()
@@ -129,16 +140,16 @@ def main(train):
                     param.requires_grad = True
 
                     
-                for param in net.gazeEs.parameters():
-                    param.requires_grad = True
+                # for param in net.gazeEs.parameters():
+                #     param.requires_grad = True
                     
                 ge_optimizer.step()
                 ga_optimizer.step()
                 de_optimizer.step()
 
-                scheduler1.step()
-                scheduler2.step()
-                scheduler3.step()
+                # scheduler1.step()
+                # scheduler2.step()
+                # scheduler3.step()
 
                 rest = timer.step()/3600
 
@@ -152,7 +163,7 @@ def main(train):
                           f"rest time:{rest:.2f}h"
                     writer.add_scalar("loss/gloss", geloss, epoch * length + i)
                     writer.add_scalar("loss/dloss", deloss, epoch * length + i)
-                    writer.add_scalar("lr", params.lr, epoch * length + i)
+                    # writer.add_scalar("lr", params.lr, epoch * length + i)
                     writer.add_scalar("rest time", rest, epoch * length + i)
                     # print(log)
                     outfile.write(log + "\n")
@@ -161,7 +172,7 @@ def main(train):
 
             if epoch % config["save"]["step"] == 0:
                 torch.save(net.state_dict(), os.path.join(
-                    savepath, f"Iter_{epoch}_{save.name}.pt"))
+                    savepath, f"Iter_{epoch}_{save.name}.pt"))        
             
 
 if __name__ == "__main__":
