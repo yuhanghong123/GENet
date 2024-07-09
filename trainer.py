@@ -51,8 +51,8 @@ def main(train):
     net.train()
     net.cuda()
 
-    # if config.pretrain:
-    #     net.load_state_dict(torch.load(config.pretrain), strict=False)
+    if config.pretrain:
+        net.load_state_dict(torch.load(config.pretrain), strict=False)
 
     print("optimizer building")
     geloss_op = model.Gelossop(attentionmap, w1=3, w2=1)

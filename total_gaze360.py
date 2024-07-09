@@ -3,6 +3,7 @@ sys.path.insert(0, os.getcwd())
 # sys.path.insert(0, "/home/chengyihua/utils/")
 from utils import model,ctools,gtools
 from yolov10backbone import v10model 
+from Res18 import model as model 
 import numpy as np
 import torch
 import torch.nn as nn
@@ -57,8 +58,8 @@ def main(train, test):
         print(f"Test: {saveiter}")
 
         # Load model --------------------------------------------------
-        # net = model.Model()
-        net = v10model.Model(alpha=1)
+        net = model.Model()
+        # # net = v10model.Model(alpha=1)
 
         modelname = f"Iter_{saveiter}_{train.save.name}.pt"
 
@@ -89,8 +90,8 @@ def main(train, test):
                 names =  data["name"]
                 gts = label.cuda()
                
-                results, _ = net(data, require_img=False)
-
+                # results, _ = net(data, require_img=False)
+                results, _ = net(data, trained=False)
                 # Cal error between each pair of result and gt ------------------
                 for k, result in enumerate(results):
 
@@ -115,7 +116,8 @@ def main(train, test):
                 log += f", best_acc: {best_acc}"
             outfile.write(log)
             print(log)
-
+        log += f", best_acc: {best_acc}"
+        outfile.write(log)
         outfile.close()
     
     print("best_acc:", best_acc)
