@@ -4,13 +4,20 @@ import torchvision.models as models
 import numpy as np
 import math
 from utils import modules
+from utils.v10modules import PSA,C2fCIB
+# import modules 
 # import torch.utils.model_zoo as model_zoo
 
 
 class Model(nn.Module):
     def __init__(self):
         super(Model, self).__init__()
-        self.feature = modules.resnet50(pretrained=True)
+        self.feature = nn.Sequential(
+            modules.resnet50(pretrained=True),
+            # C2fCIB(2048, 2048)
+            # PSA(2048, 2048)
+            )
+        # self.psa = PSA(2048,2048)
         # self.feature.load_state_dict(torch.load(pretrained_url), strict=False )
 
         self.gazeEs = modules.ResGazeEs()
@@ -20,6 +27,7 @@ class Model(nn.Module):
 
     def forward(self, x_in, require_img=True):
         features = self.feature(x_in["face"])
+        # features = self.psa(features)
         gaze = self.gazeEs(features)
         if require_img:
             img = self.deconv(features)
@@ -27,7 +35,7 @@ class Model(nn.Module):
         else:
             img = None
         return gaze, img
-
+        
 
 class Gelossop():
     def __init__(self, attentionmap, w1=1, w2=1):
@@ -55,3 +63,5 @@ class Delossop():
 
     def __call__(self, img, img_pre):
         return self.recloss(img, img_pre)
+
+

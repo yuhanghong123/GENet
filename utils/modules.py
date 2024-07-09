@@ -1,6 +1,6 @@
 import torch.nn as nn
 from torch.utils.model_zoo import load_url as load_state_dict_from_url
-
+import torch 
 
 __all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
            'resnet152', 'resnext50_32x4d', 'resnext101_32x8d',
@@ -70,6 +70,10 @@ class BasicBlock(nn.Module):
         out = self.relu(out)
 
         return out
+
+
+
+
 
 
 class Bottleneck(nn.Module):
@@ -281,6 +285,8 @@ def _resnet(arch, block, layers, pretrained, progress, **kwargs):
     return model
 
 
+
+
 def resnet18(pretrained=False, progress=True, **kwargs):
     r"""ResNet-18 model from
     `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>'_
@@ -403,4 +409,6 @@ def wide_resnet101_2(pretrained=False, progress=True, **kwargs):
     kwargs['width_per_group'] = 64 * 2
     return _resnet('wide_resnet101_2', Bottleneck, [3, 4, 23, 3],
                    pretrained, progress, **kwargs)
+
+
 
