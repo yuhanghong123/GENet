@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import numpy as np
 import math
-from Res18 import modules 
+from Res18 import modules
 import torch.utils.model_zoo as model_zoo
 
 
@@ -12,15 +12,25 @@ class Model(nn.Module):
 
         self.feature =  modules.ResFeature(modules.BasicBlock, [2,2,2,2])
 
+        self.my_conv = nn.Sequential(
+            nn.Conv2d(512, 512, 1),
+            nn.BatchNorm2d(512),
+            nn.ReLU(inplace=True)
+        )
+
         self.img_feature_dim = 256  # the dimension of the CNN feature to represent each frame
 
-        self.gazeEs = modules.ResGazeEs()
+        self.gazeEs = nn.Sequential(
+            self.my_conv,
+            modules.ResGazeEs()
+        )
 
         self.deconv = modules.ResDeconv(modules.BasicBlock)
-
+        
         
     def forward(self, x_in,  trained=True):
         features = self.feature(x_in["face"])
+        print(features.shape)
         gaze = self.gazeEs(features)
 
         if trained:
@@ -58,3 +68,9 @@ class Delossop():
         return self.recloss(img, img_pre)
 
 
+if __name__ == '__main__':
+    model = Model()
+
+    x = torch.randn(1, 3, 224, 224)
+    gaze, img = model(x)
+    print(gaze.shape)

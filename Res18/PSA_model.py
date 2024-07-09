@@ -2,9 +2,9 @@ import torch
 import torch.nn as nn
 import numpy as np
 import math
-from Res18 import modules 
+from Res18 import modules
 import torch.utils.model_zoo as model_zoo
-
+from yolov10backbone.v10modules import PSA 
 
 class Model(nn.Module):
     def __init__(self):
@@ -14,7 +14,12 @@ class Model(nn.Module):
 
         self.img_feature_dim = 256  # the dimension of the CNN feature to represent each frame
 
-        self.gazeEs = modules.ResGazeEs()
+        # self.gazeEs = modules.ResGazeEs()
+        self.gazeEs = nn.Sequential(
+            PSA(512, 512),
+            modules.ResGazeEs()
+            
+        )
 
         self.deconv = modules.ResDeconv(modules.BasicBlock)
 
@@ -22,7 +27,7 @@ class Model(nn.Module):
     def forward(self, x_in,  trained=True):
         features = self.feature(x_in["face"])
         gaze = self.gazeEs(features)
-
+        # print(gaze.shape)
         if trained:
           img = self.deconv(features)
           img = torch.sigmoid(img)
