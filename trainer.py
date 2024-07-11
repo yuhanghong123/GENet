@@ -55,7 +55,7 @@ def main(train):
         net.load_state_dict(torch.load(config.pretrain), strict=False)
 
     print("optimizer building")
-    geloss_op = model.Gelossop(attentionmap, w1=3, w2=1)
+    geloss_op = model.Gelossop(attentionmap, w1=1, w2=1)   # 修改了权重1：1 原来3：1
     deloss_op = model.Delossop()
     
     # 设置学习率为余弦调度
