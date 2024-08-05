@@ -1,2 +1,2 @@
-# Gaze Estimation with Domain Generalization for Assisting Amyotrophic Lateral Sclerosis Patients
+# Domain Generalized Gaze Estimation Network for Enhanced Cross-Environment Performance
 
