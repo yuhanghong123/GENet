@@ -42,13 +42,13 @@ We provides Res18-Version and Res50-Version. The Res50-Version is in the folder 
    **Training and Test ETH—XGaze :** 
 
    ```shell
-   ./total_eth.sh 
+   bash total_eth.sh 
    ```
 
    **Training and Test Gaze360 :**
 
    ```shell
-   ./total_gaze.sh
+   bash total_gaze.sh
    ```
 
 ## Dataset
