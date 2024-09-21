@@ -2,7 +2,7 @@ import os, sys
 sys.path.insert(0, os.getcwd())
 # sys.path.insert(0, "/home/chengyihua/utils/")
 from utils import model,ctools,gtools
-from yolov10backbone import v10model 
+# from yolov10backbone import v10model 
 from Res18 import model as model 
 import numpy as np
 import torch
