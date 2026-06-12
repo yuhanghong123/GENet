@@ -13,7 +13,7 @@ The Pytorch Implementation of “Domain Generalized Gaze Estimation Network for 
 2. Clone the repo:
 
    ```python
-   git clone https://github.com/yuhanghong123/GENet.git
+   git clone https://github.com/Yuhang-Hong/GENet.git
    ```
 
 3. Activate the environment:
